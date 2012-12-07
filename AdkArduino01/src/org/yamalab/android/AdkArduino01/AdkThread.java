@@ -132,8 +132,32 @@ public class AdkThread implements Runnable {
     public int currentSwitch0, currentSwitch1;
     private long lastReadTime=0;
     private long lastSendTime=0;
-    public void test(){
-    	this.arduinoProcessor.test();
+    public void wait(int t){
+		try{
+		    Thread.sleep((long)t);
+		}
+		catch(Exception e){
+			
+		}
+    	
+    }
+    public void test(){// PC debugging
+		Message m = Message.obtain(null, MESSAGE_ANALOG);
+		int port=0;
+		int val=50;
+		m.obj = new AnalogMsg(port,val);
+		this.analogVals[port]=val;
+		sendMessage(m);
+		this.arduinoProcessor.processAnalogInput(port, val);
+		wait(5000);
+		m = Message.obtain(null, MESSAGE_ANALOG);
+		port=0;
+		val=0;
+		m.obj = new AnalogMsg(port,val);
+		this.analogVals[port]=val;
+		sendMessage(m);
+		this.arduinoProcessor.processAnalogInput(port, val);
+		wait(5000);		
     }
 	public void run() {
 		Log.d(TAG,"run");
@@ -145,18 +169,13 @@ public class AdkThread implements Runnable {
 		while (ret >= 0) {
 			/* */
 			if(me==null) return;
-			if(mInputStream==null) { //
+			if(mInputStream==null) { // test
 				if((t % 50)==0){
 					Log.d(TAG,"run ...t="+t);
-					this.arduinoProcessor.test();
+					this.test();
 				}
 				t++;
-				try{
-				    Thread.sleep(100);
-				}
-				catch(Exception e){
-					
-				}
+				wait(100);
 				continue;
 			}
 			try {

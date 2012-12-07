@@ -5,7 +5,7 @@ import java.util.Date;
 import android.util.Log;
 
 public class ArduinoProcessor {
-   private static final String TAG = "AdkService";
+   private static final String TAG = "ArduinoProcessor";
    private AdkService adkService;
    private long lastTime;
    public ArduinoProcessor(AdkService s){
@@ -14,12 +14,7 @@ public class ArduinoProcessor {
    public void setAdkService(AdkService as){
 	   adkService=as;
    }
-   public void test(){ // PC debugging
-		this.processAnalogInput(0, 0); 
-		wait(10000);
-		this.processAnalogInput(0, 50);
-		wait(10000);
-   }
+
    public void processDigitalInput(int vals){
 	// ADK Accessory からデジタル入力, vals には、Arduino のポート 0-7 の 1 byte の値が入る
 	//	Log.d(TAG,"processDigitalInput-"+vals);
